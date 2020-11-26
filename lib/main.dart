@@ -137,9 +137,9 @@ class _HomePageState extends State<HomePage> {
                                               setState(() {
                                                 numberToBeGuessed =
                                                     rand.nextInt(100) + 1;
-                                                Navigator.of(context).pop();
                                                 tryText = '';
                                                 _controller.clear();
+                                                Navigator.of(context).pop();
                                               });
                                             },
                                           ),
