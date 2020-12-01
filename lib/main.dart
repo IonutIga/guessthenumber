@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -18,8 +19,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static Random rand = new Random();
-  TextEditingController _controller = new TextEditingController();
+  static Random rand = Random();
+  final TextEditingController _controller = TextEditingController();
   int numberToBeGuessed = rand.nextInt(100) + 1;
   String error;
   bool isVisibleGuess = true;
@@ -33,15 +34,15 @@ class _HomePageState extends State<HomePage> {
     print(numberToBeGuessed);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Guess the number'),
+        title: const Text('Guess the number'),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8),
               child: Text(
                 'I am thinking of a number between 1 and 100. Try to guess it!',
                 style: TextStyle(
@@ -55,7 +56,7 @@ class _HomePageState extends State<HomePage> {
               child: Visibility(
                 child: Text(
                   tryText,
-                  style: TextStyle(fontSize: 20, color: Colors.pink),
+                  style: const TextStyle(fontSize: 20, color: Colors.pink),
                 ),
                 visible: isVisibleTryText,
               ),
@@ -64,7 +65,8 @@ class _HomePageState extends State<HomePage> {
               elevation: 10,
               child: Column(
                 children: <Widget>[
-                  Text(
+                  const Text(
+                    // ignore: unnecessary_parenthesis
                     ('Try a number!'),
                     style: TextStyle(fontSize: 28),
                   ),
@@ -78,7 +80,8 @@ class _HomePageState extends State<HomePage> {
                           hintText: 'Insert a number', errorText: error),
                       onChanged: (String value) {
                         setState(() {
-                          if (value.isEmpty) number = null;
+                          if (value.isEmpty)
+                            number = null;
                           if (int.tryParse(value) != null) {
                             number = int.tryParse(value);
                             error = null;
@@ -94,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: RaisedButton(
-                          child: Text(
+                          child: const Text(
                             'Guess',
                             style: TextStyle(fontSize: 16),
                           ),
@@ -121,13 +124,13 @@ class _HomePageState extends State<HomePage> {
                                     showDialog<AlertDialog>(
                                       context: context,
                                       child: AlertDialog(
-                                        title: Text('You guessed right!'),
+                                        title: const Text('You guessed right!'),
                                         content: Text('It was ' +
                                             numberToBeGuessed.toString() +
                                             '!'),
                                         actions: <Widget>[
                                           TextButton(
-                                            child: Text(
+                                            child: const Text(
                                               'Try again!',
                                               style: TextStyle(
                                                 color: Colors.blue,
@@ -144,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                                             },
                                           ),
                                           TextButton(
-                                            child: Text(
+                                            child: const Text(
                                               'OK',
                                               style:
                                                   TextStyle(color: Colors.blue),
@@ -178,7 +181,7 @@ class _HomePageState extends State<HomePage> {
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 8.0),
                       child: RaisedButton(
-                        child: Text(
+                        child: const Text(
                           'Reset',
                           style: TextStyle(fontSize: 16),
                         ),
