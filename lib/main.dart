@@ -29,6 +29,65 @@ class _HomePageState extends State<HomePage> {
   int number;
   bool isEnabled = true;
 
+  void _guessNumber() {
+    setState(() {
+      if (number != null && number > 0 && number < 101) {
+        isVisibleTryText = true;
+        if (number > numberToBeGuessed)
+          tryText = 'You guessed ' + number.toString() + '. Try lower!';
+        else if (number < numberToBeGuessed)
+          tryText = 'You guessed ' + number.toString() + '. Try higher!';
+        else {
+          tryText = 'You guessed right! It was ' + numberToBeGuessed.toString();
+          showDialog<AlertDialog>(
+            context: context,
+            child: AlertDialog(
+              title: const Text('You guessed right!'),
+              content: Text('It was ' + numberToBeGuessed.toString() + '!'),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text(
+                    'Try again!',
+                    style: TextStyle(
+                      color: Colors.blue,
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      numberToBeGuessed = rand.nextInt(100) + 1;
+                      tryText = '';
+                      _controller.clear();
+                      Navigator.of(context).pop();
+                    });
+                  },
+                ),
+                TextButton(
+                  child: const Text(
+                    'OK',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isVisibleGuess = false;
+                      tryText = '';
+                      isEnabled = false;
+                      _controller.clear();
+                      Navigator.of(context).pop();
+                    });
+                  },
+                ),
+              ],
+            ),
+            barrierDismissible: true,
+          );
+        }
+      } else {
+        tryText = '';
+        error = 'Only numbers between 1 and 100!';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     print(numberToBeGuessed);
@@ -77,11 +136,14 @@ class _HomePageState extends State<HomePage> {
                       enabled: isEnabled,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          hintText: 'Insert a number', errorText: error),
+                        hintText: 'Insert a number',
+                        errorText: error,
+                      ),
                       onChanged: (String value) {
                         setState(() {
-                          if (value.isEmpty)
+                          if (value.isEmpty) {
                             number = null;
+                          }
                           if (int.tryParse(value) != null) {
                             number = int.tryParse(value);
                             error = null;
@@ -104,75 +166,7 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.blue,
                           textColor: Colors.white,
                           onPressed: () {
-                            setState(
-                              () {
-                                if (number != null &&
-                                    number > 0 &&
-                                    number < 101) {
-                                  isVisibleTryText = true;
-                                  if (number > numberToBeGuessed)
-                                    tryText = 'You guessed ' +
-                                        number.toString() +
-                                        '. Try lower!';
-                                  else if (number < numberToBeGuessed)
-                                    tryText = 'You guessed ' +
-                                        number.toString() +
-                                        '. Try higher!';
-                                  else {
-                                    tryText = 'You guessed right! It was ' +
-                                        numberToBeGuessed.toString();
-                                    showDialog<AlertDialog>(
-                                      context: context,
-                                      child: AlertDialog(
-                                        title: const Text('You guessed right!'),
-                                        content: Text('It was ' +
-                                            numberToBeGuessed.toString() +
-                                            '!'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text(
-                                              'Try again!',
-                                              style: TextStyle(
-                                                color: Colors.blue,
-                                              ),
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                numberToBeGuessed =
-                                                    rand.nextInt(100) + 1;
-                                                tryText = '';
-                                                _controller.clear();
-                                                Navigator.of(context).pop();
-                                              });
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text(
-                                              'OK',
-                                              style:
-                                                  TextStyle(color: Colors.blue),
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                isVisibleGuess = false;
-                                                tryText = '';
-                                                isEnabled = false;
-                                                _controller.clear();
-                                                Navigator.of(context).pop();
-                                              });
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                      barrierDismissible: true,
-                                    );
-                                  }
-                                } else {
-                                  tryText = '';
-                                  error = 'Only numbers between 1 and 100!';
-                                }
-                              },
-                            );
+                            _guessNumber();
                           }),
                     ),
                     visible: isVisibleGuess,
